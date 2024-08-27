@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  proxy_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4433:4433" 
+    networks:
+      - firehole_network
+    container_name: proxy_server
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/usr/src/app/src
+    command: ["poetry", "run", "python", "src/firehole/main.py", "proxy"]
+
+  https_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4434:4434"  
+    networks:
+      - firehole_network
+    container_name: https_server
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/usr/src/app/src
+    command: ["poetry", "run", "python", "src/firehole/main.py", "https"]
+
+networks:
+  firehole_network:
+    driver: bridge
