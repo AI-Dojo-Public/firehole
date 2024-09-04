@@ -2,25 +2,15 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 import ssl
 import os
 import json
-import logging
-from enum import Enum
 
-# ANSI escape codes for color
-HTTP_LOG_COLOR = '\033[92m'  # Light Green
+from firehole.utility.logger import logger
+
 
 def get_ssl_context(certfile, keyfile):
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(certfile, keyfile)
     context.set_ciphers("@SECLEVEL=1:ALL")
     return context
-
-# Configure logging for TestServer
-logger = logging.getLogger('test_server')
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter(HTTP_LOG_COLOR + '[HTTP_SERVER] %(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 class TestHandler(SimpleHTTPRequestHandler):
     def log_request_details(self):
@@ -57,14 +47,16 @@ class TestHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_json)
 
-class Handler(Enum):
-    TEST = TestHandler
 
-def run_server(address: str, port: int, handler: Handler):
-    current_path = os.path.dirname(os.path.realpath(__file__))
-    context = get_ssl_context(f"{current_path}/cert.pem", f"{current_path}/key.pem")
+def run_server(address: str, port: int):
+    # current_path = os.path.dirname(os.path.realpath(__file__))
+    # context = get_ssl_context(f"{current_path}/cert.pem", f"{current_path}/key.pem")
 
-    httpd = HTTPServer((address, port), handler.value)
-    httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
+    httpd = HTTPServer((address, port), TestHandler)
+    # httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
     logger.info(f"Starting HTTP server on {address}:{port}")
     httpd.serve_forever()
+
+
+if __name__ == '__main__':
+    run_server("127.0.0.1", 8000)
