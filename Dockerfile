@@ -1,21 +1,25 @@
-FROM python:3.11-slim
+FROM python:3.12-slim AS base
 
-WORKDIR /usr/src/app
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
-# Install Poetry
-COPY pyproject.toml poetry.lock ./
+WORKDIR /app
+
 RUN pip install poetry
-RUN poetry install --no-root
 
-# Copy application code
+# Install dependencies
+COPY poetry.lock pyproject.toml ./
+RUN poetry install --no-root --no-interaction --no-ansi --without dev
+
+# Install app
 COPY . .
+RUN poetry install --only-root --no-interaction --no-ansi
 
-# Generate SSL certificates
-RUN openssl req -x509 -newkey rsa:4096 -keyout src/firehole/http_s/key.pem -out src/firehole/http_s/cert.pem -days 365 -noenc -addext "subjectAltName = DNS:proxy_server, DNS:https_server, IP:127.0.0.1" \
-    -subj "/C=CZ/ST=Czechia/L=Brno/O=AI DOJO/OU=AI DOJO/CN=localhost/emailAddress=ai@mojo.dojo"
+FROM python:3.12-slim AS production
 
-RUN cat src/firehole/http_s/cert.pem src/firehole/http_s/key.pem > src/firehole/http_s/cert-and-key.pem
+COPY --from=base /app /app
+COPY config.yml /
 
-EXPOSE 4433 4434
+RUN ln -s /app/.venv/bin/firehole /usr/local/bin/firehole
 
-CMD ["poetry", "run", "python", "src/firehole/main.py"]
+ENTRYPOINT [ "firehole" ]
+CMD [ "/config.yml" ]
