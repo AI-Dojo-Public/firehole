@@ -1,6 +1,8 @@
 import sys
 import yaml
+
 from firehole.http_s.proxy import HTTPProxy
+from firehole.utility.helpers import ProxyProcess
 
 
 def main():
@@ -8,20 +10,25 @@ def main():
         print("Usage: firehole /path/to/config.yml")
         sys.exit(1)
 
-    config = sys.argv[1]
-    with open(config) as config_file:
+    config_path = sys.argv[1]
+    with open(config_path) as config_file:
         configuration = yaml.safe_load(config_file)
 
+    proxies: list[ProxyProcess] = list()
     for application in configuration["applications"]:
-        if application["type"] == "http_s":
-            HTTPProxy(
-                application["host"],
-                application["port"],
-                application["origin_host"],
-                application["origin_port"],
-                application.get("certificate"),
-                application.get("private_key"),
-                application.get("vulnerabilities", [])
-            ).start()
-        else:
-            print(f"Unknown proxy type {application['type']}")
+        match application["type"]:
+            case "http_s":
+                proxy = HTTPProxy(
+                    application["host"],
+                    application["port"],
+                    application["origin_host"],
+                    application["origin_port"],
+                    application.get("certificate"),
+                    application.get("private_key"),
+                    application.get("vulnerabilities", [])
+                )
+                process = ProxyProcess(proxy)
+                proxies.append(process)
+                process.start()
+            case _:
+                print(f"Unknown proxy type {application['type']}")
