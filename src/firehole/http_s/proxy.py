@@ -2,9 +2,11 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 import ssl
 import requests
 from importlib import import_module
+from typing import Type
 
 from firehole.utility.logger import logger
-from firehole.http_s.vulnerabilities.abstract import VulnerabilityAbstract
+from firehole.abstract.vulnerability import VulnerabilityAbstract
+from firehole.abstract.proxy import ProxyAbstract
 
 
 class ProxyHandler(SimpleHTTPRequestHandler):
@@ -65,12 +67,12 @@ class ProxyServer(HTTPServer):
         self.origin_host = origin_host
         self.origin_port = origin_port
         self.tls = tls
-        self.vulnerabilities: list[VulnerabilityAbstract] = list()
+        self.vulnerabilities: list[Type[VulnerabilityAbstract]] = list()
         for vulnerability in vulnerabilities:
             self.vulnerabilities.append(import_module(f"firehole.http_s.vulnerabilities.{vulnerability.replace('-', '_').lower()}.main").Vulnerability)
 
 
-class HTTPProxy:
+class HTTPProxy(ProxyAbstract):
     def __init__(self, host: str, port: int, origin_host: str, origin_port: int, certificate: str, private_key: str, vulnerabilities: list[str]):
         self.host = host
         self.port = port
