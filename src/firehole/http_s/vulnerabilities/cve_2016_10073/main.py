@@ -1,8 +1,7 @@
 import os
 
-
 from firehole.utility.logger import logger
-from firehole.http_s.vulnerabilities.abstract import VulnerabilityAbstract
+from firehole.abstract.vulnerability import VulnerabilityAbstract
 from firehole.http_s.proxy import ProxyHandler
 
 

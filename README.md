@@ -64,3 +64,43 @@ Execute the scan with:
 ```
 run
 ```
+
+## Create proxy
+
+Create a new Python package inside the `firehole` package with the name of the proxy (for example an FTP proxy will be called `ftp`). Inside the package directory create a Python file (for example `proxy.py`). This file will contain a class derived from the `firehole.abstract.proxy.ProxyAbstract`.
+
+Additionally create a `vulnerabilities` package inside the proxy package directory (for our example `firehole/ftp/vulnerabilities`), which will contain CVE implementations for the proxy.
+
+Proxy file example:
+```python
+from firehole.abstract.proxy import ProxyAbstract
+
+
+class ProxyFTP(ProxyAbstract):
+    def __init__(self):
+        pass
+
+    def start(self):
+        pass
+
+```
+
+
+Vulnerability file example:
+```python
+from firehole.abstract.vulnerability import VulnerabilityAbstract
+
+
+class Vulnerability(VulnerabilityAbstract):
+    def __init__(self, request: Request):
+        self.request = request
+
+    def is_vulnerable(self):
+        return True
+
+    def check(self) -> bool:
+        if self.is_vulnerable():
+            return True
+        return False
+
+```
