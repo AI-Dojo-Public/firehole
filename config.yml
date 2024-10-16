@@ -8,3 +8,5 @@ applications:
     private_key: /path/key.pem
     vulnerabilities:
       - CVE-2016-10073
+      - CVE-2014-6287
+
