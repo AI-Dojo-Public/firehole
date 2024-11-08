@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "firehole"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = [
     "Jiří Rája <raja@ics.muni.cz>",
@@ -17,12 +17,13 @@ packages = [{include = "firehole", from = "src"}]
 python = "^3.11"
 requests = "^2.32.3"
 PyYAML = "^6.0.1"
+structlog = "^24.4.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
 
 [tool.poetry.scripts]
-firehole = 'firehole.main:main'
+firehole = 'firehole.main:cli'
 
 [build-system]
 requires = ["poetry-core"]

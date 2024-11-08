@@ -1,14 +1,15 @@
-from multiprocessing import Process
+from importlib import import_module
+from typing import Type
+
+from firehole.abstract.vulnerability import VulnerabilityAbstract
 
 
-class ProxyProcess:
-    def __init__(self, proxy):
-        self.proxy = proxy
-        self._process: Process | None = None
-
-    def start(self):
-        self._process = Process(target=self.proxy.start)
-        self._process.start()
-
-    def stop(self):
-        self._process.kill()
+def import_vulnerability(proxy_module: str, vulnerability_name: str) -> Type[VulnerabilityAbstract]:
+    """
+    Import a vulnerability of the selected proxy module.
+    :param proxy_module: Name of the proxy - its root Python package it resides in (e.g. `http_`)
+    :param vulnerability_name: Vulnerability name - its root Python package it resides in (e.g. `CVE-1-2`)
+    :return: Vulnerability class
+    """
+    parsed_vulnerability = vulnerability_name.replace("-", "_").lower()
+    return import_module(f"firehole.proxies.{proxy_module}.vulnerabilities.{parsed_vulnerability}.main").Vulnerability
