@@ -1,12 +1,22 @@
 import logging
+import structlog
+import sys
+
+from firehole.utility import settings
 
 
-PROXY_LOG_COLOR = '\033[94m'  # Light Blue
-HTTP_LOG_COLOR = '\033[92m'  # Light Green
+processors = [
+    structlog.processors.add_log_level,
+    structlog.processors.TimeStamper(fmt="iso", utc=True),
+]
+if sys.stderr.isatty() and settings.DEBUG:  # Only for debugging in a local terminal
+    processors += [structlog.dev.ConsoleRenderer()]
+else:
+    processors += [structlog.processors.JSONRenderer()]
 
-logger = logging.getLogger('proxy_server')
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter(PROXY_LOG_COLOR + '[PROXY] %(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+structlog.configure(
+    processors=processors,
+    wrapper_class=structlog.make_filtering_bound_logger(logging.DEBUG if settings.DEBUG else logging.INFO),
+)
+
+logger: structlog.stdlib.BoundLogger = structlog.get_logger("firehole")

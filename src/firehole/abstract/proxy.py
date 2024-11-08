@@ -8,3 +8,12 @@ class ProxyAbstract(ABC):
         Start the proxy.
         :return: None
         """
+
+    @staticmethod
+    @abstractmethod
+    def create(**kwargs) -> "ProxyAbstract":
+        """
+        Create a proxy instance.
+        :param kwargs: Arguments used for the proxy creation
+        :return: Instance of the proxy
+        """
