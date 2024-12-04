@@ -3,9 +3,9 @@ import ssl
 import requests
 from requests.structures import CaseInsensitiveDict
 from uuid import uuid1
+from typing import Self
 
 from firehole.utility.logger import logger
-from firehole.utility.helpers import import_vulnerability
 from firehole.abstract.proxy import ProxyAbstract
 
 
@@ -93,7 +93,7 @@ class ProxyHTTP(ProxyAbstract, HTTPServer):
         self._certificate = certificate
         self._private_key = private_key
         self._vulnerability_names = vulnerabilities
-        self._vulnerabilities = [import_vulnerability("http_", vulnerability) for vulnerability in vulnerabilities]
+        self._vulnerabilities = [self.import_vulnerability(vulnerability) for vulnerability in vulnerabilities]
         self._context = self.create_ssl_context(certificate, private_key) if certificate and private_key else None
         self._origin_url = f"http{'s' if self._context else ''}://{origin_host}:{origin_port}"
         super().__init__((host, port), RequestHandler)
@@ -114,14 +114,14 @@ class ProxyHTTP(ProxyAbstract, HTTPServer):
     def logger(self):
         return self._logger
 
-    @staticmethod
-    def create(**kwargs) -> "ProxyHTTP":
+    @classmethod
+    def create(cls, **kwargs) -> Self:
         """
         Parse the config and instantiate the proxy.
         :param kwargs: Raw arguments from the config
         :return: Proxy instance
         """
-        return ProxyHTTP(
+        return cls(
             kwargs["host"],
             kwargs["port"],
             kwargs["origin_host"],

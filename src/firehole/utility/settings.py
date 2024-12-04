@@ -1,4 +1,4 @@
 import os
 
 
-DEBUG = False if os.getenv("FIREHOLE_DEBUG", "false").lower() == "false" else True
+DEBUG = True if os.getenv("FIREHOLE_DEBUG", "false").lower() == "true" else False
