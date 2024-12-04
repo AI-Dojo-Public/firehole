@@ -32,7 +32,7 @@ class ProxyNew(ProxyAbstract):  # TODO: Update the class name
         Start and run the proxy forever.
         :return: None
         """
-        self._logger.info(f"Starting my proxy", vulnerabilities=self._vulnerability_names)
+        self._logger.info("Starting my proxy", vulnerabilities=self._vulnerability_names)
         # Do stuff
         while True:
             if self._vulnerabilities[0](self._logger).check_and_exploit():
