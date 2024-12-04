@@ -1,0 +1,75 @@
+site_name: Firehole
+site_url: https://ai-dojo.gitlab-pages.ics.muni.cz/firehole/
+repo_url: https://gitlab.ics.muni.cz/ai-dojo/firehole
+
+theme:
+  name: material
+  locale: en
+  custom_dir: docs/.overrides
+  palette:
+    - scheme: slate
+      primary: red
+      accent: red
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: red
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+  features:
+    - content.tabs.link # Linked code tabs
+    - content.code.copy # Code copy button
+    - navigation.tracking # Anchor tracking
+    - navigation.top # Back-to-top button
+    - navigation.instant  # Instant loading
+    - navigation.instant.progress  # Show progress when loading a new page
+    - navigation.indexes  # Index pages for sections
+    - navigation.footer  # Next/Previous page shortcut in the footer
+    - search.highlight # Highlight searched terms
+    - toc.follow  # Anchor following (the right navigation)
+
+extra:
+  version:
+    provider: mike
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.extra
+
+plugins:
+  - search:
+      lang: en
+  - mike:
+      alias_type: redirect
+      canonical_version: latest
+
+nav:
+  - Introduction: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Proxies:
+      - HTTP:
+          - proxies/http/index.md
+          - Vulnerabilities:
+              - CVE-2016-10073: proxies/http/vulnerabilities/CVE-2016-10073.md
+              - CVE-2014-6287: proxies/http/vulnerabilities/CVE-2014-6287.md
+  - Development: development.md
+  - Generating certificates: certificates.md
