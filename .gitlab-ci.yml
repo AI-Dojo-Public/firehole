@@ -17,6 +17,20 @@ stages:
         - .gitlab-ci.yml
     - when: never
 
+.test:
+  stage: test
+  rules:
+    - changes:
+        - src/**/*
+        - tests/**/*
+        - pyproject.toml
+        - poetry.lock
+        - examples/proxy/**/*
+        - .gitlab-ci.yml
+    - when: never
+  before_script:
+    - poetry install --with docs
+
 build_documentation:
   extends: .documentation
   stage: test
@@ -24,6 +38,16 @@ build_documentation:
     - poetry install --with docs
   script:
     - poetry run mkdocs build
+
+test_linter:
+  extends: .test
+  script:
+    - poetry run ruff check
+
+test_formatter:
+  extends: .test
+  script:
+    - poetry run ruff format --diff
 
 .publish:
   stage: publish

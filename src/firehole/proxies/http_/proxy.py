@@ -137,7 +137,7 @@ class ProxyHTTP(ProxyAbstract, HTTPServer):
         :return: None
         """
         self.logger.info(
-            f"Starting HTTP proxy",
+            "Starting HTTP proxy",
             vulnerabilities=self._vulnerability_names,
             origin_address=self.origin_url,
             certificate=self.certificate,
