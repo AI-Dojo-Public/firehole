@@ -75,5 +75,9 @@ nav:
           - proxies/ftp/index.md
           - Vulnerabilities:
               - CVE-2011-2523: proxies/http/vulnerabilities/CVE-2011-2523.md
+      - MySQL:
+          - proxies/mysql/index.md
+          - Vulnerabilities:
+              - CVE-2012-2122: proxies/mysql/vulnerabilities/CVE-2012-2122.md
   - Development: development.md
   - Generating certificates: certificates.md

@@ -4,11 +4,9 @@ version = "0.2.0"
 description = ""
 authors = [
     "Jiří Rája <raja@ics.muni.cz>",
-    "Daniel Volf <248688@mail.muni.cz>",
 ]
 maintainers = [
     "Jiří Rája <raja@ics.muni.cz>",
-    "Daniel Volf <248688@mail.muni.cz>",
 ]
 readme = "README.md"
 packages = [{include = "firehole", from = "src"}]
@@ -17,7 +15,7 @@ packages = [{include = "firehole", from = "src"}]
 python = "^3.11"
 requests = "^2.32.3"
 PyYAML = "^6.0.1"
-structlog = "^24.4.0"
+structlog = "^25.1.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.1"
