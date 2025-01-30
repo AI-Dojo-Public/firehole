@@ -2,6 +2,7 @@ from enum import Enum, EnumMeta
 
 from firehole.proxies.http_.proxy import ProxyHTTP
 from firehole.proxies.ftp.proxy import ProxyFTP
+from firehole.proxies.mysql.proxy import ProxyMySQL
 
 
 class ProxyMeta(EnumMeta):
@@ -19,10 +20,12 @@ class ProxyMeta(EnumMeta):
 class Proxy(Enum, metaclass=ProxyMeta):
     http = ProxyHTTP
     ftp = ProxyFTP
+    mysql = ProxyMySQL
 
 
 __all__ = [
     "Proxy",
     "ProxyHTTP",
     "ProxyFTP",
+    "ProxyMySQL",
 ]
