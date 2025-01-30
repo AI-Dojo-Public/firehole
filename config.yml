@@ -7,3 +7,11 @@ applications:
     vulnerabilities:
       - CVE-2016-10073
       - CVE-2014-6287
+
+  - type: ftp
+    host: 0.0.0.0
+    port: 2121
+    origin_host: 127.0.0.1
+    origin_port: 2122
+    vulnerabilities:
+      - cve-2011-2523
