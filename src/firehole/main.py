@@ -5,6 +5,10 @@ from firehole.proxies import Proxy
 from multiprocessing import Process
 
 
+def create_and_start_proxy(description: dict):
+    Proxy[description["type"]].value.create(**description).start()
+
+
 def start(configuration: dict) -> None:
     """
     Create and start the proxies using the provided configuration.
@@ -13,8 +17,7 @@ def start(configuration: dict) -> None:
     """
     processes: list[Process] = list()
     for application in configuration["applications"]:
-        proxy = Proxy[application["type"]].value.create(**application)
-        process = Process(target=proxy.start)
+        process = Process(target=create_and_start_proxy, args=(application,))
         processes.append(process)
 
     # If there is an error in the configuration, start only if all the proxies are created successfully
