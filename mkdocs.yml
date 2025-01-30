@@ -71,5 +71,9 @@ nav:
           - Vulnerabilities:
               - CVE-2016-10073: proxies/http/vulnerabilities/CVE-2016-10073.md
               - CVE-2014-6287: proxies/http/vulnerabilities/CVE-2014-6287.md
+      - FTP:
+          - proxies/ftp/index.md
+          - Vulnerabilities:
+              - CVE-2011-2523: proxies/http/vulnerabilities/CVE-2011-2523.md
   - Development: development.md
   - Generating certificates: certificates.md
