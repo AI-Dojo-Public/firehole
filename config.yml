@@ -23,3 +23,11 @@ applications:
     origin_port: 3306
     vulnerabilities:
       - CVE-2012-2122
+
+  - type: smb
+    host: 0.0.0.0
+    port: 4455
+    origin_host: 127.0.0.1
+    origin_port: 445
+    vulnerabilities:
+      - CVE-2024-99999

