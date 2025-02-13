@@ -1,11 +1,14 @@
 import sys
 import yaml
+import socket
+from multiprocessing import Process
 
 from firehole.proxies import Proxy
-from multiprocessing import Process
 
 
 def create_and_start_proxy(description: dict):
+    if description["host"] == "auto":
+        description["host"] = socket.gethostbyname(socket.gethostname())
     Proxy[description["type"]].value.create(**description).start()
 
 
